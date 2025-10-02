@@ -55,7 +55,7 @@ graph TD
 > **Goal:** Membagikan file "Kitab Penciptaan" sebagai *Eru* serta memastikan node *Manwe* dapat mengunduh file tersebut dan membatasi akun pengguna *ainur* menjadi *read-only*.
 - **Artifacts:** [cuaca.zip](https://drive.google.com/drive/folders/1XQh6S1xXcaP1QoUhQSZORsgK9xdMUxXx?usp=sharing)
 
-## 10. Ping Spam & Identifikasi Packet Loss + Average Round Trip Time
+## 10. Identifikasi Packet Loss & Average Round Trip Time
 > **Goal:** Melakukan spam ping ke node *Eru* menggunakan sebagai *Melkor* dan mengidentifikasi dampak dari ping.
 
 
