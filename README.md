@@ -175,11 +175,11 @@ Namun, jika kita menghilangkan batas tersebut. Dampaknya pada *average round tri
 
 
 ## 11. Identifikasi Kelemahan Telnet Protokol
-> **Goal:** Buat akun baru di node *Melkor* dan tangkap sesi login *Eru* menggunakan Wireshark.
+**Goal:** Buat akun baru di node *Melkor* dan tangkap sesi login *Eru* menggunakan Wireshark.
 
 
 ## 12. Scan Port Netcat
-> **Goal:** Melakukan pemindaian port dari node *Eru* ke node *Melkor* menggunakan **Netcat** `nc` untuk memeriksa port 21, 80 dalam keadaan terbuka dan port 666 dalam keadaan tertutup.
+**Goal:** Melakukan pemindaian port dari node *Eru* ke node *Melkor* menggunakan **Netcat** `nc` untuk memeriksa port 21, 80 dalam keadaan terbuka dan port 666 dalam keadaan tertutup.
 
 ## 12.1 Setup Port
 Pada node **Melkor**, jalankan FTP dan apache untuk membuka port 21 dan 80
