@@ -2,39 +2,41 @@
 
 ## Table of Contents
 
-1. [1 Router & 2 Switches & 4 Clients](#1-1-router--2-switches--4-clients)  
-2. [Menghubungkan Router ke Internet](#2-menghubungkan-router-ke-internet)  
-3. [Menghubungkan tiap Client dengan satu sama lain](#3-menghubungkan-tiap-client-dengan-satu-sama-lain)  
-4. [Menghubungkan tiap Client dengan internet](#4-menghubungkan-tiap-client-dengan-internet)  
-5. [Membuat Konfigurasi Node tidak hilang ketika Restart](#5-membuat-konfigurasi-node-tidak-hilang-ketika-restart)  
-6. [Packet Sniffing Koneksi Manwe dengan Eru](#6-packet-sniffing-koneksi-manwe-dengan-eru)  
-7. [FTP Server & 2 New User Permissions](#7-ftp-server--2-new-user-permissions)  
-8. [Analisis Proses Upload File & Identifikasi Perintah FTP](#8-analisis-proses-upload-file--identifikasi-perintah-ftp)  
-9. [Akses Pengguna FTP](#9-akses-pengguna-ftp)  
-   - [9.1 Download File](#91-download-file)  
-   - [9.2 Memindahkan File ke Dalam FTP](#92-memindahkan-file-ke-dalam-ftp)  
-   - [9.3 Melakukan konfigurasi akses pengguna](#93-melakukan-konfigurasi-akses-pengguna)  
-   - [9.4 Uji Akses Pengguna](#94-uji-akses-pengguna)  
-10. [Identifikasi Packet Loss & Average Round Trip Time](#10-identifikasi-packet-loss--average-round-trip-time)
-     - [10.1 Ping Spam](#101-ping-spam)
-     - [10.2 Ping Flood](#102-ping-flood)
-11. [Identifikasi Kelemahan Telnet Protokol](#11-identifikasi-kelemahan-telnet-protokol)  
-12. [Scan Port Netcat](#12-scan-port-netcat)
-    - [12.1 Setup Port](#121-setup-port)
-    - [12.2 Netcat](#122-netcat)  
-13. [Identifikasi Keunggulan Secure Shell](#13-identifikasi-keunggulan-secure-shell)  
-14. [Identifikasi Brute Force](#14-identifikasi-brute-force)
-    - [14.1 Jumlah Packets](#141-jumlah-packets)
-    - [14.2 User Login (HTTP)](#142-user-login-http)
-    - [14.3 Stream ID](#143-stream-id)
-    - [14.4 Identifikasi Tools](#144-identifikasi-tools)
-15. [Identifikasi Device & Keystrokes](#15-identifikasi-device--keystrokes)
-    - [15.1 Identifikasi Device](#151-identifikasi-device)
-    - [15.2 Mengumpulkan Input](#152-mengumpulkan-input)
-    - [15.3 Pesan Rahasia](#153-pesan-rahasia)
+-   [1. 1 Router \& 2 Switches \& 4 Clients](#1-1-router--2-switches--4-clients)
+-   [2. Menghubungkan Router ke Internet](#2-menghubungkan-router-ke-internet)
+-   [3. Menghubungkan tiap Client dengan satu sama lain](#3-menghubungkan-tiap-client-dengan-satu-sama-lain)
+-   [4. Menghubungkan tiap Client dengan internet](#4-menghubungkan-tiap-client-dengan-internet)
+-   [5. Membuat Konfigurasi Node tidak hilang ketika Restart](#5-membuat-konfigurasi-node-tidak-hilang-ketika-restart)
+-   [6. Packet Sniffing Koneksi Manwe dengan Eru](#6-packet-sniffing-koneksi-manwe-dengan-eru)
+-   [7. FTP Server \& 2 New User Permissions](#7-ftp-server--2-new-user-permissions)
+-   [8. Analisis Proses Upload File \& Identifikasi Perintah FTP](#8-analisis-proses-upload-file--identifikasi-perintah-ftp)
+-   [9. Akses Pengguna FTP](#9-akses-pengguna-ftp)
+    -   [9.1 Download File](#91-download-file)
+    -   [9.2 Memindahkan File ke Dalam FTP](#92-memindahkan-file-ke-dalam-ftp)
+    -   [9.3 Melakukan konfigurasi akses pengguna](#93-melakukan-konfigurasi-akses-pengguna)
+    -   [9.4 Uji Akses Pengguna](#94-uji-akses-pengguna)
+-   [10. Identifikasi Packet Loss \& Average Round Trip Time](#10-identifikasi-packet-loss--average-round-trip-time)
+    -   [10.1 Ping Spam](#101-ping-spam)
+    -   [10.2 Ping Flood](#102-ping-flood)
+-   [11. Identifikasi Kelemahan Telnet Protokol](#11-identifikasi-kelemahan-telnet-protokol)
+-   [12. Scan Port Netcat](#12-scan-port-netcat)
+-   [12.1 Setup Port](#121-setup-port)
+-   [12.2 Netcat](#122-netcat)
+-   [13. Identifikasi Keunggulan Secure Shell](#13-identifikasi-keunggulan-secure-shell)
+-   [14. Identifikasi Brute Force](#14-identifikasi-brute-force)
+    -   [14.1 Jumlah Packets](#141-jumlah-packets)
+    -   [14.2 User Login (HTTP)](#142-user-login-http)
+    -   [14.3 Stream ID](#143-stream-id)
+    -   [14.4 Identifikasi Tools](#144-identifikasi-tools)
+-   [15. Identifikasi Device \& Keystrokes](#15-identifikasi-device--keystrokes)
+    -   [15.1 Identifikasi Device](#151-identifikasi-device)
+    -   [15.2 Mengumpulkan Input](#152-mengumpulkan-input)
+    -   [15.3 Pesan Rahasia](#153-pesan-rahasia)
 
 ## 1. 1 Router & 2 Switches & 4 Clients
+
 **Goal:** Menghubungkan 1 Router dengan 2 Switches/Gateways, dimana tiap switch akan terhubung dengan 2 Client
+
 -   **Components:**
     -   Router: Eru
     -   Switch1
@@ -56,152 +58,194 @@ graph TD
 ```
 
 ## 2. Menghubungkan Router ke Internet
+
 **Goal:** Menyambungkan Eru dengan internet.
 
 ## 3. Menghubungkan tiap Client dengan satu sama lain
+
 **Goal:** Menghubungkan Melkor, Manwe, Varda, dan Ulmo antara satu sama lain.
 
 ## 4. Menghubungkan tiap Client dengan internet
+
 **Goal:** Menyambungkan Melkor, Manwe, Varda, dan Ulmo dengan internet.
 
 ## 5. Membuat Konfigurasi Node tidak hilang ketika Restart
+
 **Goal:** Mengkonfigurasi tiap Node (Router dan Client) sehingga ketika di-restart konfigurasi tidak akan terulang.
 
 ## 6. Packet Sniffing Koneksi Manwe dengan Eru
-**Goal:** Melakukan *packet sniffing* terhadap traffic yang terbuat antara Manwe dengan Eru.
 
-> - **Notes:** Mencantumkan hasil *capture* yang merupakan hasil *packet sniffing* dengan *display filter* untuk menampilkan semua paket yang berasal dari atau menuju ke **IP Address Manwe**.
-> - **Artifacts:** [traffic.zip](https://drive.google.com/drive/folders/1ULr_Fik1O0_79zUng41POMZtdzJTugVR?usp=sharing)
+**Goal:** Melakukan _packet sniffing_ terhadap traffic yang terbuat antara Manwe dengan Eru.
+
+> -   **Notes:** Mencantumkan hasil _capture_ yang merupakan hasil _packet sniffing_ dengan _display filter_ untuk menampilkan semua paket yang berasal dari atau menuju ke **IP Address Manwe**.
+> -   **Artifacts:** [traffic.zip](https://drive.google.com/drive/folders/1ULr_Fik1O0_79zUng41POMZtdzJTugVR?usp=sharing)
 
 ## 7. FTP Server & 2 New User Permissions
-**Goal:** Membuat suatu FTP Server dengan dua user baru dimana ainur memiliki *write & read permission* dan melkor tidak memiliki permission sama sekali.
 
-> - **Notes:** Melakukan testing dengan file teks sederhana yang diuji dengan diakses oleh kedua user baru.
+**Goal:** Membuat suatu FTP Server dengan dua user baru dimana ainur memiliki _write & read permission_ dan melkor tidak memiliki permission sama sekali.
+
+> -   **Notes:** Melakukan testing dengan file teks sederhana yang diuji dengan diakses oleh kedua user baru.
 
 ## 8. Analisis Proses Upload File & Identifikasi Perintah FTP
-**Goal:** Menggunakan user *ainur* untuk upload dari *Ulmo* untuk upload file ke *Eru* dan menganalisis proses dan mengidentifikasi perintah FTP yang terjadi menggunakan Wireshark.
-> - **Artifacts:** [cuaca.zip](https://drive.google.com/drive/folders/1XQh6S1xXcaP1QoUhQSZORsgK9xdMUxXx?usp=sharing)
+
+**Goal:** Menggunakan user _ainur_ untuk upload dari _Ulmo_ untuk upload file ke _Eru_ dan menganalisis proses dan mengidentifikasi perintah FTP yang terjadi menggunakan Wireshark.
+
+> -   **Artifacts:** [cuaca.zip](https://drive.google.com/drive/folders/1XQh6S1xXcaP1QoUhQSZORsgK9xdMUxXx?usp=sharing)
 
 ## 9. Akses Pengguna FTP
-**Goal:** Membagikan file "Kitab Penciptaan" sebagai *Eru* serta memastikan node *Manwe* dapat mengunduh file tersebut dan membatasi akun pengguna *ainur* menjadi *read-only*.
+
+**Goal:** Membagikan file "Kitab Penciptaan" sebagai _Eru_ serta memastikan node _Manwe_ dapat mengunduh file tersebut dan membatasi akun pengguna _ainur_ menjadi _read-only_.
 
 ### 9.1 Download File
+
 Langkah pertama sebelum membagikan file "Kitab Penciptaan" melalui **Eru**, kita perlu mengunduh file melalui Google drive. Buka node **Eru** dan jalankan command berikut:
+
 ```shell
 wget --no-check-certificate 'https://drive.google.com/uc?export=download&id=11ua2KgBu3MnHEIjhBnzqqv2RMEiJsILY' -O kitab_penciptaan.zip
 ```
-Karena file yang di *download* merupakan `.zip`, maka kita perlu mengekstraknya untuk mendapatkan file `.txt`
+
+Karena file yang di _download_ merupakan `.zip`, maka kita perlu mengekstraknya untuk mendapatkan file `.txt`
 
 Instal `unzip` untuk membantu mengekstrak file:
+
 ```bash
 apt install unzip
 unzip kitab_penciptaan.zip
 ```
 
 ### 9.2 Memindahkan File ke Dalam FTP
+
 Setelah selesai mengekstak file, kita perlu memindah file tersebut ke dalam direktori FTP server supaya dapat diakses node lain melalui FTP
+
 ```bash
 mv kitab_penciptaan.txt /srv/ftp/
 ```
 
 ### 9.3 Melakukan konfigurasi akses pengguna
-Karena kita ingin membagikan file ini ke node **Manwe** dengan memastikan bahwa user **ainur** hanya memiliki akses *read-only*, kita perlu menambahkan file konfigurasi akses pengguna.
+
+Karena kita ingin membagikan file ini ke node **Manwe** dengan memastikan bahwa user **ainur** hanya memiliki akses _read-only_, kita perlu menambahkan file konfigurasi akses pengguna.
+
 ```bash
 echo “user_config_dir=/etc/vsftpd_user_conf” > /etc/vsftpd.conf
 mkdir /etc/vsftpd_user_conf
 ```
+
 Setelah folder konfigurasi pengguna sudah ditambahkan ke konfigurasi umum, kita dapat menambahkan file konfigurasi pengguna ke dalam folder tersebut.
 
 Konfigurasi **Manwe**
+
 ```
 echo “write_enable=YES” > /etc/vsftpd_user_conf/manwe
 ```
+
 Konfigurasi **ainur**
+
 ```
 echo “write_enable=NO” > /etc/vsftpd_user_conf/ainur
 ```
 
 ### 9.4 Uji Akses Pengguna
+
 Pada node **Manwe**, kita seharusnya dapat megunduh, mengunggah, dan menghapus file melalui FTP dengan kredensial
+
 ```
 Name : manwe
 Password: manwe
 ```
+
 Jalankan perintah FTP dan masukkan kredensial yang telah disediakan.
+
 ```
 ftp 10.72.1.1
 ```
+
 Uji akses pengguna dengan mengunduh file dan mengunggah file
+
 ```
 ftp> get kitab_penciptaan.txt
 ftp> put coba.txt
 ```
+
 Jika konfigurasi sudah benar, maka kedua perintah tersebut akan berhasil dijalankan.
 
 Kemudian, pada node yang sama, kita akan menguji akses pengguna **ainur** dengan kredensial
+
 ```
 Name: ainur
 Password: ainur
 ```
+
 Lakukan perintah FTP yang sama dengan kredensial **ainur** dan jika konfigurasi sudah benar, maka pengguna **ainur** hanya dapat mengunduh file tetapi tidak dapat mengunggah file dengan respon `550 Permission denied.`
 
-> - **Artifacts:** [kitab_penciptaan.zip](https://drive.google.com/drive/folders/1XQh6S1xXcaP1QoUhQSZORsgK9xdMUxXx?usp=sharing)
+> -   **Artifacts:** [kitab_penciptaan.zip](https://drive.google.com/drive/folders/1XQh6S1xXcaP1QoUhQSZORsgK9xdMUxXx?usp=sharing)
 
 ## 10. Identifikasi Packet Loss & Average Round Trip Time
-**Goal:** Melakukan spam ping ke node *Eru* menggunakan sebagai *Melkor* dan mengidentifikasi dampak dari ping.
+
+**Goal:** Melakukan spam ping ke node _Eru_ menggunakan sebagai _Melkor_ dan mengidentifikasi dampak dari ping.
 
 ### 10.1 Ping Spam
 
 Kita akan mengirimkan ping dengan jumlah 100 paket ke node **Eru** melalui node **Melkor**
 Kita dapat menggunakan command berikut:
+
 ```
 ping -c 100 10.72.1.1
 ```
+
 atau
+
 ```
 ping -f -c 100 10.72.1.1
 ```
+
 Setelah itu, kita akan mendapatkan detail terkait persentase packet loss dan average round trip time
 
 <img width="754" height="68" alt="image" src="https://github.com/user-attachments/assets/9931a460-f6d0-43dc-b04a-14a773e165e6" />
 
-Di sini kita dapat melihat bahwa dengan membatasi jumlah ping sebanyak 100 paket, dampak yang terjadi pada *average round trip time* dan jumlah persentase *packet loss* tidak begitu signifikan.
+Di sini kita dapat melihat bahwa dengan membatasi jumlah ping sebanyak 100 paket, dampak yang terjadi pada _average round trip time_ dan jumlah persentase _packet loss_ tidak begitu signifikan.
 
 ### 10.2 Ping Flood
 
-Namun, jika kita menghilangkan batas tersebut. Dampaknya pada *average round trip time* dan jumlah persentase *packet loss* akan sedikit lebih terlihat.
+Namun, jika kita menghilangkan batas tersebut. Dampaknya pada _average round trip time_ dan jumlah persentase _packet loss_ akan sedikit lebih terlihat.
 
 <img width="844" height="64" alt="image" src="https://github.com/user-attachments/assets/4fb7a725-81c6-495e-ac89-2013b5c8af01" />
 
-
 ## 11. Identifikasi Kelemahan Telnet Protokol
-**Goal:** Buat akun baru di node *Melkor* dan tangkap sesi login *Eru* menggunakan Wireshark.
 
+**Goal:** Buat akun baru di node _Melkor_ dan tangkap sesi login _Eru_ menggunakan Wireshark.
 
 ## 12. Scan Port Netcat
-**Goal:** Melakukan pemindaian port dari node *Eru* ke node *Melkor* menggunakan **Netcat** `nc` untuk memeriksa port 21, 80 dalam keadaan terbuka dan port 666 dalam keadaan tertutup.
+
+**Goal:** Melakukan pemindaian port dari node _Eru_ ke node _Melkor_ menggunakan **Netcat** `nc` untuk memeriksa port 21, 80 dalam keadaan terbuka dan port 666 dalam keadaan tertutup.
 
 ## 12.1 Setup Port
+
 Pada node **Melkor**, jalankan FTP dan apache untuk membuka port 21 dan 80
 
 FTP
+
 ```
 apt-get install vsftpd -y
 service vsftpd start
 ```
 
 Apache
+
 ```
 apt-get install apache2 -y
 service apache2 start
 ```
 
 ## 12.2 Netcat
+
 Pada node **Eru** lakukan netcat ke IP **Melkor** dengan port yang sudah ditentukan (21, 80, 666)
+
 ```
 nc -zv 10.72.1.2 21 60 666
 ```
+
 Jika berhasil, output yang diberikan akan terlihat seperti ini:
+
 ```
 Connection to 10.72.1.2 21 port [tcp/ftp] succeeded!
 Connection to 10.72.1.2 80 port [tcp/http] succeeded!
@@ -209,47 +253,50 @@ nc: connect to 10.72.1.2 port 666 (tcp) failed: Connection refused
 ```
 
 ## 13. Identifikasi Keunggulan Secure Shell
-**Goal:** Melakukan koneksi SSH dari node *Varda* ke *Eru* dan menganalisis perbedaan `telnet` dengan SSH.
+
+**Goal:** Melakukan koneksi SSH dari node _Varda_ ke _Eru_ dan menganalisis perbedaan `telnet` dengan SSH.
 
 ## 14. Identifikasi Brute Force
+
 **Goal:** Mengidentifikasi serangan brute force melalui HTTP request melalui Wireshark.
 
 ### 14.1 Jumlah Packets
 
-***Q: How many packets are recorded in the pcapng file?***
+**_Q: How many packets are recorded in the pcapng file?_**
 
-Pada tampilan Wireshark di bagian bawah terdapat semacam *footer* yang mencantumkan nama file jumlah *packets* dan profile yang dipakai. Dari tampilan tersebut kita bisa mengetahui jumlah *packets* yang ada pada file yang sedang kita buka.
+Pada tampilan Wireshark di bagian bawah terdapat semacam _footer_ yang mencantumkan nama file jumlah _packets_ dan profile yang dipakai. Dari tampilan tersebut kita bisa mengetahui jumlah _packets_ yang ada pada file yang sedang kita buka.
 
 <img width="956" height="248" alt="image" src="https://github.com/user-attachments/assets/5fa334ef-c919-4f30-a66a-fc85c51fa0a7" />
 
-Dari tampilan ini kita menemukan bahwa terdapat sebanyak `500358` *packets*
+Dari tampilan ini kita menemukan bahwa terdapat sebanyak `500358` _packets_
 
 ### 14.2 User Login (HTTP)
 
-***Q: What are the user that successfully logged in?***
+**_Q: What are the user that successfully logged in?_**
 
 Jika dilihat sekilas, kita tahu bahwa pada file ini terdapat jejak yang menunjukkan beberapa kali percobaan login melalui HTTP request. Kita akan menggunakan filter `http.response.code == 200` untuk mengambil request yang berhasil diproses saja.
 
 <img width="956" height="758" alt="image" src="https://github.com/user-attachments/assets/e25736dc-452a-4fcc-9db9-978773a9d411" />
 
-Dari hasil filter, kita menemukan respons yang menunjukkan "Invalid credentials" yang berarti request login berhasil diproses. 
+Dari hasil filter, kita menemukan respons yang menunjukkan "Invalid credentials" yang berarti request login berhasil diproses.
 
-Selanjutnya, kita perlu mengeleminasi login yang gagal untuk menemukan respon login yang berhasil. Kita akan menggunakan filter `http contains "Invalid credentials"` dan kemudian menandai seluruh respons gagal login dengan *select all* `ctrl + a` dan *shortcut* `ctrl + m` untuk *mark*. Setelah itu, kita bisa kembali ke filter `http.response.code == 200` dan menemukan respons yang tidak tertandai.
+Selanjutnya, kita perlu mengeleminasi login yang gagal untuk menemukan respon login yang berhasil. Kita akan menggunakan filter `http contains "Invalid credentials"` dan kemudian menandai seluruh respons gagal login dengan _select all_ `ctrl + a` dan _shortcut_ `ctrl + m` untuk _mark_. Setelah itu, kita bisa kembali ke filter `http.response.code == 200` dan menemukan respons yang tidak tertandai.
 
 <img width="960" height="1000" alt="Cuplikan layar 2025-10-01 095926" src="https://github.com/user-attachments/assets/1ca549ec-ee71-420b-931d-c4106abad00d" />
 
-Setelah itu kita bisa klik kanan pada *packet* tersebut dan memilih `follow > HTTP Stream` untuk mendapatkan detail request yang bersangkutan dengan respons tersebut.
+Setelah itu kita bisa klik kanan pada _packet_ tersebut dan memilih `follow > HTTP Stream` untuk mendapatkan detail request yang bersangkutan dengan respons tersebut.
 
 <img width="523" height="406" alt="Cuplikan layar 2025-10-01 100003" src="https://github.com/user-attachments/assets/3b5c8e98-eb92-4c3b-b3cd-7f6344b1a49a" />
 
 Dari tampilan ini kita menemukan kredensial pengguna yang berhasil digunakan untuk login, yaitu:
+
 ```
 n1enna:y4v4nn4_k3m3nt4r1
 ```
 
 ### 14.3 Stream ID
 
-***Q: In which stream were the credentials found?***
+**_Q: In which stream were the credentials found?_**
 
 Pada tampilan `HTTP Stream` sebelumnya, kita dapat melihat ID stream pada bagian atas (header).
 
@@ -259,7 +306,7 @@ Tampilan tersebut menunjukkan bahwa kredensial pengguna yang digunakan untuk log
 
 ### 14.4 Identifikasi Tools
 
-***Q: What tools are used for brute force?***
+**_Q: What tools are used for brute force?_**
 
 Karena brute force dilakukan melalui protokol HTTP, maka tools yang digunakan dapat kita lihat pada tampilan `HTTP Stream` yang sama pada bagian `User-Agent` di dalam barisan request.
 
@@ -267,14 +314,15 @@ Karena brute force dilakukan melalui protokol HTTP, maka tools yang digunakan da
 
 Melalui tampilan tersebut, kita dapat mengetahui bahwa tools yang digunakan oleh penyerang adalah `Fuzz Faster U Fool v2.1.0-dev`.
 
-> - flag: KOMJAR25{Brut3_F0rc3_GYJfoNyTGpfHDDqiVrB7bXs9G}
+> -   flag: KOMJAR25{Brut3_F0rc3_GYJfoNyTGpfHDDqiVrB7bXs9G}
 
 ## 15. Identifikasi Device & Keystrokes
+
 **Goal:** Mengidentifikasi device yang digunakan penyerang dan melakukan decode pada input keystrokes yang ditemukan
 
 ### 15.1 Identifikasi Device
 
-***Q: What device does Melkor use?***
+**_Q: What device does Melkor use?_**
 
 Pada file ini, untuk dapat mengetahui device yang digunakan. Kita bisa menggunakan filter `usb.binterfaceProtocol` yang berisikan informasi terkait protocol yang digunakan, misalnya seperti mouse, keyboard, joystick, dan lain-lain
 
@@ -284,13 +332,14 @@ Pada tampilan tersebut, kita mendapatkan informasi bahwa device yang digunakan a
 
 ### 15.2 Mengumpulkan Input
 
-***Q: What did Melkor write?***
+**_Q: What did Melkor write?_**
 
 Pada kasus ini, Kita dapat menggunakan filter `usb.transfer_type == 0x01` ketika pengguna menggunakan perangkat berupa keyboard yang termasuk perangkat yang menggunakan tipe transfer `interrupt`.
 
 <img width="1136" height="1079" alt="Cuplikan layar 2025-10-01 100801" src="https://github.com/user-attachments/assets/f1308c1f-f4b8-4edf-be8c-dbc6159044f9" />
 
-Pada beberapa paket, ditemukan `HID Data` yang merupakan input dengan suatu format tertentu. 
+Pada beberapa paket, ditemukan `HID Data` yang merupakan input dengan suatu format tertentu.
+
 ```
 HID Data: 0200000000000000
     .... ...0 = Key: LeftControl (0xe0): UP
@@ -303,7 +352,9 @@ HID Data: 0200000000000000
     0... .... = Key: RightGUI (0xe7): UP
     Padding: 00
 ```
-Dari pengamatan yang dilakukan, kita mengetahui bahwa 2 bit pertama merupakan *modifier keys*. Dari 2 bit pertama tersebut, kita bisa mengetahui input spesifik yang dilakukan. Sedangkan, 2 bit berikutnya merupakan padding.
+
+Dari pengamatan yang dilakukan, kita mengetahui bahwa 2 bit pertama merupakan _modifier keys_. Dari 2 bit pertama tersebut, kita bisa mengetahui input spesifik yang dilakukan. Sedangkan, 2 bit berikutnya merupakan padding.
+
 ```
 Array: 1c0000000000
     0001 1100 = Usage: Keyboard y and Y (0x0007, 0x001c)
@@ -313,9 +364,11 @@ Array: 1c0000000000
     0000 0000 = Usage: Reserved (no event indicated) (0x0007, 0x0000)
     0000 0000 = Usage: Reserved (no event indicated) (0x0007, 0x0000)
 ```
-Beberapa bit berikutnya mengandung *slots* untuk *non-modifier keys* seperti huruf dan angka. Mengetahui hal ini, kita bisa menambahkan data ini ke dalam kolom untuk kita export sebagai [keystrokes.csv](resources/keystrokes.csv) untuk memudahkan kita mengambil data yang diperlukan nantinya.
+
+Beberapa bit berikutnya mengandung _slots_ untuk _non-modifier keys_ seperti huruf dan angka. Mengetahui hal ini, kita bisa menambahkan data ini ke dalam kolom untuk kita export sebagai [keystrokes.csv](resources/keystrokes.csv) untuk memudahkan kita mengambil data yang diperlukan nantinya.
 
 Karena terlalu merepotkan jika harus mengecek satu per satu HID Data dan mengubahnya ke dalam bentuk ASCII, maka saya membuat kode untuk menerjemahkannya secara otomatis menggunakan `.csv` file yang sudah kita simpan tadi. Berikut merupakan kode programnya:
+
 ```python
 import csv
 
@@ -360,12 +413,15 @@ with open("E:\!packages\hiddenmsg\keystrokes.csv", newline="") as f: //sesuaikan
 
 print("Recovered keystrokes:\n", decoded_text)
 ```
+
 atau bisa langsung melalui file [USBHIDecoder.py](resources/USBHIDecoder.py) dan untuk menjalankannya gunakan perintah berikut:
+
 ```
 python USBHIDecoder.py
 ```
 
 Setelah menjalankan program tersebut, kita akan mendapatkan output pada terminal berupa string dalam bentuk ASCII sebagai berikut:
+
 ```
 Recovered keystrokes:
  UGx6X3ByMHYxZGVfeTB1cl91czNybjRtZV80bmRfcDRzc3cwcmQ=
@@ -373,16 +429,16 @@ Recovered keystrokes:
 
 ### 15.3 Pesan Rahasia
 
-***Q: What is Melkor's secret message?***
+**_Q: What is Melkor's secret message?_**
 
-Kita telah mendapatkan input yang dicari. Namun, input tersebut masih berbentuk acak dan bukan pesan yang bisa dibaca. Kita perlu melakukan analisis dan *decoding* pada pesan tersebut. Dengan *tools online* kita dapat melakukan analisis untuk mengetahui metode *encoding* apa yang digunakan.
+Kita telah mendapatkan input yang dicari. Namun, input tersebut masih berbentuk acak dan bukan pesan yang bisa dibaca. Kita perlu melakukan analisis dan _decoding_ pada pesan tersebut. Dengan _tools online_ kita dapat melakukan analisis untuk mengetahui metode _encoding_ apa yang digunakan.
 
 <img width="982" height="463" alt="image" src="https://github.com/user-attachments/assets/ed86929c-d466-43d0-97c3-34b52bce5185" />
 
-Setelah itu, kita dapat melakukan *decoding* untuk mendapatkan pesan asli yang ingin disampaikan.
+Setelah itu, kita dapat melakukan _decoding_ untuk mendapatkan pesan asli yang ingin disampaikan.
 
 <img width="987" height="329" alt="image" src="https://github.com/user-attachments/assets/71560593-2c83-493e-ab5e-13f353b4c577" />
 
 Melalui proses ini, kita telah berhasil mendapatkan pesan tersembunyi.
 
-> - flag: KOMJAR25{K3yb0ard_W4rr10r_g75X7A6dEVFygJciLNGKK6GKA}
+> -   flag: KOMJAR25{K3yb0ard_W4rr10r_g75X7A6dEVFygJciLNGKK6GKA}
