@@ -268,3 +268,118 @@ Melalui tampilan tersebut, kita dapat mengetahui bahwa tools yang digunakan oleh
 
 ## 15. Identifikasi Device & Keystrokes
 **Goal:** Mengidentifikasi device yang digunakan penyerang dan melakukan decode pada input keystrokes yang ditemukan
+
+### 15.1 Identifikasi Device
+
+***Q: What device does Melkor use?***
+
+Pada file ini, untuk dapat mengetahui device yang digunakan. Kita bisa menggunakan filter `usb.binterfaceProtocol` yang berisikan informasi terkait protocol yang digunakan, misalnya seperti mouse, keyboard, joystick, dan lain-lain
+
+<img width="554" height="212" alt="Cuplikan layar 2025-10-01 100357" src="https://github.com/user-attachments/assets/21ee4689-e16f-49fc-b340-46b811141b8c" />
+
+Pada tampilan tersebut, kita mendapatkan informasi bahwa device yang digunakan adalah `Keyboard`.
+
+### 15.2 Mengumpulkan Input
+
+***Q: What did Melkor write?***
+
+Pada kasus ini, Kita dapat menggunakan filter `usb.transfer_type == 0x01` ketika pengguna menggunakan perangkat berupa keyboard yang termasuk perangkat yang menggunakan tipe transfer `interrupt`.
+
+<img width="1136" height="1079" alt="Cuplikan layar 2025-10-01 100801" src="https://github.com/user-attachments/assets/f1308c1f-f4b8-4edf-be8c-dbc6159044f9" />
+
+Pada beberapa paket, ditemukan `HID Data` yang merupakan input dengan suatu format tertentu. 
+```
+HID Data: 0200000000000000
+    .... ...0 = Key: LeftControl (0xe0): UP
+    .... ..1. = Key: LeftShift (0xe1): DOWN
+    .... .0.. = Key: LeftAlt (0xe2): UP
+    .... 0... = Key: LeftGUI (0xe3): UP
+    ...0 .... = Key: RightControl (0xe4): UP
+    ..0. .... = Key: RightShift (0xe5): UP
+    .0.. .... = Key: RightAlt (0xe6): UP
+    0... .... = Key: RightGUI (0xe7): UP
+    Padding: 00
+```
+Dari pengamatan yang dilakukan, kita mengetahui bahwa 2 bit pertama merupakan *modifier keys*. Dari 2 bit pertama tersebut, kita bisa mengetahui input spesifik yang dilakukan. Sedangkan, 2 bit berikutnya merupakan padding.
+```
+Array: 1c0000000000
+    0001 1100 = Usage: Keyboard y and Y (0x0007, 0x001c)
+    0000 0000 = Usage: Reserved (no event indicated) (0x0007, 0x0000)
+    0000 0000 = Usage: Reserved (no event indicated) (0x0007, 0x0000)
+    0000 0000 = Usage: Reserved (no event indicated) (0x0007, 0x0000)
+    0000 0000 = Usage: Reserved (no event indicated) (0x0007, 0x0000)
+    0000 0000 = Usage: Reserved (no event indicated) (0x0007, 0x0000)
+```
+Beberapa bit berikutnya mengandung *slots* untuk *non-modifier keys* seperti huruf dan angka. Mengetahui hal ini, kita bisa menambahkan data ini ke dalam kolom untuk kita export sebagai [keystrokes.csv]() untuk memudahkan kita mengambil data yang diperlukan nantinya.
+
+Karena terlalu merepotkan jika harus mengecek satu per satu HID Data dan mengubahnya ke dalam bentuk ASCII, maka saya membuat kode untuk menerjemahkannya secara otomatis menggunakan `.csv` file yang sudah kita simpan tadi. Berikut merupakan kode programnya:
+```python
+import csv
+
+# HID scan code to ASCII (only basic letters/numbers for demo)
+hid_map = {
+    0x04: 'a', 0x05: 'b', 0x06: 'c', 0x07: 'd',
+    0x08: 'e', 0x09: 'f', 0x0a: 'g', 0x0b: 'h',
+    0x0c: 'i', 0x0d: 'j', 0x0e: 'k', 0x0f: 'l',
+    0x10: 'm', 0x11: 'n', 0x12: 'o', 0x13: 'p',
+    0x14: 'q', 0x15: 'r', 0x16: 's', 0x17: 't',
+    0x18: 'u', 0x19: 'v', 0x1a: 'w', 0x1b: 'x',
+    0x1c: 'y', 0x1d: 'z',
+    0x1e: '1', 0x1f: '2', 0x20: '3', 0x21: '4',
+    0x22: '5', 0x23: '6', 0x24: '7', 0x25: '8',
+    0x26: '9', 0x27: '0',
+    0x28: '\n',  # Enter
+    0x2c: ' ',   # Space
+    0x2d: '-', 0x2e: '=', 0x2f: '[', 0x30: ']',
+    0x33: ';', 0x34: "'", 0x36: ',', 0x37: '.',
+}
+
+decoded_text = ""
+
+
+# Update: Use first 2 bytes from Array, pad with two '00', use second byte as HID code
+
+with open("E:\!packages\hiddenmsg\keystrokes.csv", newline="") as f: //sesuaikan path
+    reader = csv.DictReader(f)
+    for row in reader:
+        array_hex = row["Array"].strip()                             //sesuaikan nama kolom jika perlu
+        hid_data = row.get("HID Data", "").strip()                   //sesuaikan nama kolom jika perlu
+        shift = False
+        if len(hid_data) >= 2 and hid_data[:2] == "02":
+            shift = True
+        if len(array_hex) >= 2:
+            code = int(array_hex[:2], 16)
+            if code in hid_map:
+                char = hid_map[code]
+                if shift and char.isalpha():
+                    char = char.upper()
+                decoded_text += char
+
+print("Recovered keystrokes:\n", decoded_text)
+```
+atau bisa langsung melalui file [USBHIDecoder.py]() dan untuk menjalankannya gunakan perintah berikut:
+```
+python USBHIDecoder.py
+```
+
+Setelah menjalankan program tersebut, kita akan mendapatkan output pada terminal berupa string dalam bentuk ASCII sebagai berikut:
+```
+Recovered keystrokes:
+ UGx6X3ByMHYxZGVfeTB1cl91czNybjRtZV80bmRfcDRzc3cwcmQ=
+```
+
+### 15.3 Pesan Rahasia
+
+***Q: What is Melkor's secret message?***
+
+Kita telah mendapatkan input yang dicari. Namun, input tersebut masih berbentuk acak dan bukan pesan yang bisa dibaca. Kita perlu melakukan analisis dan *decoding* pada pesan tersebut. Dengan *tools online* kita dapat melakukan analisis untuk mengetahui metode *encoding* apa yang digunakan.
+
+<img width="982" height="463" alt="image" src="https://github.com/user-attachments/assets/ed86929c-d466-43d0-97c3-34b52bce5185" />
+
+Setelah itu, kita dapat melakukan *decoding* untuk mendapatkan pesan asli yang ingin disampaikan.
+
+<img width="987" height="329" alt="image" src="https://github.com/user-attachments/assets/71560593-2c83-493e-ab5e-13f353b4c577" />
+
+Melalui proses ini, kita telah berhasil mendapatkan pesan tersembunyi.
+
+> - flag: KOMJAR25{K3yb0ard_W4rr10r_g75X7A6dEVFygJciLNGKK6GKA}
