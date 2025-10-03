@@ -310,7 +310,7 @@ Array: 1c0000000000
     0000 0000 = Usage: Reserved (no event indicated) (0x0007, 0x0000)
     0000 0000 = Usage: Reserved (no event indicated) (0x0007, 0x0000)
 ```
-Beberapa bit berikutnya mengandung *slots* untuk *non-modifier keys* seperti huruf dan angka. Mengetahui hal ini, kita bisa menambahkan data ini ke dalam kolom untuk kita export sebagai [keystrokes.csv]() untuk memudahkan kita mengambil data yang diperlukan nantinya.
+Beberapa bit berikutnya mengandung *slots* untuk *non-modifier keys* seperti huruf dan angka. Mengetahui hal ini, kita bisa menambahkan data ini ke dalam kolom untuk kita export sebagai [keystrokes.csv](resources/keystrokes.csv) untuk memudahkan kita mengambil data yang diperlukan nantinya.
 
 Karena terlalu merepotkan jika harus mengecek satu per satu HID Data dan mengubahnya ke dalam bentuk ASCII, maka saya membuat kode untuk menerjemahkannya secara otomatis menggunakan `.csv` file yang sudah kita simpan tadi. Berikut merupakan kode programnya:
 ```python
@@ -357,7 +357,7 @@ with open("E:\!packages\hiddenmsg\keystrokes.csv", newline="") as f: //sesuaikan
 
 print("Recovered keystrokes:\n", decoded_text)
 ```
-atau bisa langsung melalui file [USBHIDecoder.py]() dan untuk menjalankannya gunakan perintah berikut:
+atau bisa langsung melalui file [USBHIDecoder.py](resources/USBHIDecoder.py) dan untuk menjalankannya gunakan perintah berikut:
 ```
 python USBHIDecoder.py
 ```
