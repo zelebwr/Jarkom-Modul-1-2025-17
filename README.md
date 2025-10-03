@@ -17,14 +17,18 @@
    - [9.4 Uji Akses Pengguna](#94-uji-akses-pengguna)  
 10. [Identifikasi Packet Loss & Average Round Trip Time](#10-identifikasi-packet-loss--average-round-trip-time)
      - [10.1 Ping Spam](#101-ping-spam)
-     -  [10.2 Ping Flood](#102-ping-flood)
-12. [Identifikasi Kelemahan Telnet Protokol](#11-identifikasi-kelemahan-telnet-protokol)  
-13. [Scan Port Netcat](#12-scan-port-netcat)
+     - [10.2 Ping Flood](#102-ping-flood)
+11. [Identifikasi Kelemahan Telnet Protokol](#11-identifikasi-kelemahan-telnet-protokol)  
+12. [Scan Port Netcat](#12-scan-port-netcat)
     - [12.1 Setup Port](#121-setup-port)
     - [12.2 Netcat](#122-netcat)  
-14. [Identifikasi Keunggulan Secure Shell](#13-identifikasi-keunggulan-secure-shell)  
-15. [Identifikasi Brute Force](#14-identifikasi-brute-force)  
-16. [Identifikasi Device & Keystrokes](#15-identifikasi-device--keystrokes)  
+13. [Identifikasi Keunggulan Secure Shell](#13-identifikasi-keunggulan-secure-shell)  
+14. [Identifikasi Brute Force](#14-identifikasi-brute-force)
+    - [14.1 Jumlah Packets](#141-jumlah-packets)
+    - [14.2 User Login (HTTP)](#142-user-login-http)
+    - [14.3 Stream ID](#143-stream-id)
+    - [14.4 Identifikasi Tools](#144-identifikasi-tools)
+15. [Identifikasi Device & Keystrokes](#15-identifikasi-device--keystrokes)  
 
 ## 1. 1 Router & 2 Switches & 4 Clients
 **Goal:** Menghubungkan 1 Router dengan 2 Switches/Gateways, dimana tiap switch akan terhubung dengan 2 Client
@@ -204,7 +208,10 @@ nc: connect to 10.72.1.2 port 666 (tcp) failed: Connection refused
 ## 13. Identifikasi Keunggulan Secure Shell
 **Goal:** Melakukan koneksi SSH dari node *Varda* ke *Eru* dan menganalisis perbedaan `telnet` dengan SSH.
 
-### 13.1 Jumlah Packet dalam Traffic
+## 14. Identifikasi Brute Force
+**Goal:** Mengidentifikasi serangan brute force melalui HTTP request melalui Wireshark.
+
+### 14.1 Jumlah Packets
 
 ***Q: How many packets are recorded in the pcapng file?***
 
@@ -214,7 +221,7 @@ Pada tampilan Wireshark di bagian bawah terdapat semacam *footer* yang mencantum
 
 Dari tampilan ini kita menemukan bahwa terdapat sebanyak `500358` *packets*
 
-### 13.2 User Login (HTTP)
+### 14.2 User Login (HTTP)
 
 ***Q: What are the user that successfully logged in?***
 
@@ -237,7 +244,7 @@ Dari tampilan ini kita menemukan kredensial pengguna yang berhasil digunakan unt
 n1enna:y4v4nn4_k3m3nt4r1
 ```
 
-### 13.3 Stream ID
+### 14.3 Stream ID
 
 ***Q: In which stream were the credentials found?***
 
@@ -247,7 +254,7 @@ Pada tampilan `HTTP Stream` sebelumnya, kita dapat melihat ID stream pada bagian
 
 Tampilan tersebut menunjukkan bahwa kredensial pengguna yang digunakan untuk login ada pada stream `41824`.
 
-### 13.4 Identifikasi Tools
+### 14.4 Identifikasi Tools
 
 ***Q: What tools are used for brute force?***
 
@@ -258,9 +265,6 @@ Karena brute force dilakukan melalui protokol HTTP, maka tools yang digunakan da
 Melalui tampilan tersebut, kita dapat mengetahui bahwa tools yang digunakan oleh penyerang adalah `Fuzz Faster U Fool v2.1.0-dev`.
 
 > - flag: KOMJAR25{Brut3_F0rc3_GYJfoNyTGpfHDDqiVrB7bXs9G}
-
-## 14. Identifikasi Brute Force
-**Goal:** Mengidentifikasi serangan brute force melalui HTTP request melalui Wireshark.
 
 ## 15. Identifikasi Device & Keystrokes
 **Goal:** Mengidentifikasi device yang digunakan penyerang dan melakukan decode pada input keystrokes yang ditemukan
