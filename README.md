@@ -17,7 +17,9 @@
    - [9.4 Uji Akses Pengguna](#94-uji-akses-pengguna)  
 10. [Identifikasi Packet Loss & Average Round Trip Time](#10-identifikasi-packet-loss--average-round-trip-time)  
 11. [Identifikasi Kelemahan Telnet Protokol](#11-identifikasi-kelemahan-telnet-protokol)  
-12. [Scan Port Netcat](#12-scan-port-netcat)  
+12. [Scan Port Netcat](#12-scan-port-netcat)    
+   - [12.1 Setup Port](#121-setup-port)  
+   - [12.2 Netcat](#122-netcat)  
 13. [Identifikasi Keunggulan Secure Shell](#13-identifikasi-keunggulan-secure-shell)  
 14. [Identifikasi Brute Force](#14-identifikasi-brute-force)  
 15. [Identifikasi Device & Keystrokes](#15-identifikasi-device--keystrokes)  
@@ -163,6 +165,33 @@ Namun, jika kita menghilangkan batas tersebut. Dampaknya pada *average round tri
 
 ## 12. Scan Port Netcat
 > **Goal:** Melakukan pemindaian port dari node *Eru* ke node *Melkor* menggunakan **Netcat** `nc` untuk memeriksa port 21, 80 dalam keadaan terbuka dan port 666 dalam keadaan tertutup.
+
+## 12.1 Setup Port
+Pada node **Melkor**, jalankan FTP dan apache untuk membuka port 21 dan 80
+
+FTP
+```
+apt-get install vsftpd -y
+service vsftpd start
+```
+
+Apache
+```
+apt-get install apache2 -y
+service apache2 start
+```
+
+## 12.2 Netcat
+Pada node **Eru** lakukan netcat ke IP **Melkor** dengan port yang sudah ditentukan (21, 80, 666)
+```
+nc -zv 10.72.1.2 21 60 666
+```
+Jika berhasil, output yang diberikan akan terlihat seperti ini:
+```
+Connection to 10.72.1.2 21 port [tcp/ftp] succeeded!
+Connection to 10.72.1.2 80 port [tcp/http] succeeded!
+nc: connect to 10.72.1.2 port 666 (tcp) failed: Connection refused
+```
 
 ## 13. Identifikasi Keunggulan Secure Shell
 > **Goal:** Melakukan koneksi SSH dari node *Varda* ke *Eru* dan menganalisis perbedaan `telnet` dengan SSH.
