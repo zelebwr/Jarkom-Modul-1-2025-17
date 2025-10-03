@@ -28,7 +28,10 @@
     - [14.2 User Login (HTTP)](#142-user-login-http)
     - [14.3 Stream ID](#143-stream-id)
     - [14.4 Identifikasi Tools](#144-identifikasi-tools)
-15. [Identifikasi Device & Keystrokes](#15-identifikasi-device--keystrokes)  
+15. [Identifikasi Device & Keystrokes](#15-identifikasi-device--keystrokes)
+    - [15.1 Identifikasi Device](#151-identifikasi-device)
+    - [15.2 Mengumpulkan Input](#152-mengumpulkan-input)
+    - [15.3 Pesan Rahasia](#153-pesan-rahasia)
 
 ## 1. 1 Router & 2 Switches & 4 Clients
 **Goal:** Menghubungkan 1 Router dengan 2 Switches/Gateways, dimana tiap switch akan terhubung dengan 2 Client
