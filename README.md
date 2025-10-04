@@ -57,21 +57,178 @@ graph TD
     D --> D2[Ulmo]
 ```
 
+### 1.1 Topology Image
+
+![network topology](images/1-networking-topology.png)
+
+### 1.2 Topology Details
+
+-   **NAT1:** Network Address Translation (NAT) merupakan jembatan yang ada antara local IP Address dengan Public IP Address. Hasil dari penggunaan NAT adalah dengan adanya suatu device/Client dari Local Network yang ingin mengakses internet (global), maka IP Address yang akan digunakan adalah Public IP Address yang dimiliki NAT tersebut.
+-   **Eru:** Router merupakan alat jaringan pada OSI Layer 3, dimana berfungsi untuk menghubungkan berbagai jaringan lokal yang berbeda, baik dengan satu sama lain maupun menuju ke suatu hubungan lainnya, seperti internet. Cara kerjanya adalah dengan menggunakan Routing Table untuk mencari IP Address tujuan.
+-   **Switch1/2:** Switch merupakan alat jaringan pada OSI Layer 2, dimana berfungsi untuk menghubungkan jaringan antara satu device dengan device yang lainnya yang berada di dalam satu cakupan jaringan lokal yang sama. Cara kerjanya adalah dengan menggunakan MAC Address Table untuk mencari MAC Address dari suatu device tujuan. Switch bekerja dengan meneruskan jaringan secara langsung dari satu device menuju device lainnya tanpa melalui device lainnya, sehingga traffic activity tidak akan terlihat oleh device lainnya yang berada dalam satu cakupan LAN.
+-   **Melkor/Manwe/Varda/Ulmo:** Client merupakan alat jaringan yang menginisiasi permintaan layanan jaringan menuju alat jaringan lainnya.
+
 ## 2. Menghubungkan Router ke Internet
 
 **Goal:** Menyambungkan Eru dengan internet.
+
+### 2.1 Router Network Configuration
+
+```shell
+auto eth0
+iface eth0 inet dhcp
+```
+
+-   `auto eth0`: Secara otomatis, ketika jaringan pertama berjalan/menyala, maka akan mencari antarmuka jaringan `eth0` dan memastikan untuk menyalakan kartu jaringan tersebut.
+-   `iface eth0 inet dhcp`: baris berikut digunakan untuk mengonfigurasi kartu jaringan `eth0`.
+    -   `iface eth0`: Menyatakan secara eksplisit bahwa mengonfigurasi `eth0` interface.
+    -   `inet`: Menyatakan bahwa configurasi dilakukan dengan jaringan IPv4 (kalau `inet6` merupakan IPv6).
+    -   `dhcp`: Dibandingkan `static` (dimana diharuskan untuk mengonfigurasi IP address secara manual), `dhcp` meminta antarmukanya untuk secara aktif meminta konfigurasi jaringan kepada server pada jaringan melalui DHCP Client.
 
 ## 3. Menghubungkan tiap Client dengan satu sama lain
 
 **Goal:** Menghubungkan Melkor, Manwe, Varda, dan Ulmo antara satu sama lain.
 
+### 3.1 Switches Gateways
+
+Tiap client dapat dihubungkan melalui switch, sehingga tiap switch menjadi suatu jaringan lokal tersendiri seperti gambar di bawah ini.
+
+![switch1](./images/2-switch1.png)
+
+Hal ini dapat bekerja dengan tiap Client memiliki konfigurasi sebagai berikut:
+
+**1. Melkor**
+
+```shell
+auto eth0
+iface eth0 inet static
+	address 10.72.1.2
+	netmask 255.255.255.0
+	gateway 10.72.1.1
+```
+
+**2. Manwe**
+
+```shell
+auto eth0
+iface eth0 inet static
+	address 10.72.1.3
+	netmask 255.255.255.0
+	gateway 10.72.1.1
+```
+
+**3. Varda**
+
+```shell
+auto eth0
+iface eth0 inet static
+	address 10.72.2.2
+	netmask 255.255.255.0
+	gateway 10.72.2.1
+```
+
+**4. Ulmo**
+
+```shell
+auto eth0
+iface eth0 inet static
+	address 10.72.2.3
+	netmask 255.255.255.0
+	gateway 10.72.2.1
+```
+
+### 3.2 Router Gateways
+
+Lalu untuk Router sendiri harus memiliki konfigurasi sebagai berikut sehingga dapat menghubungkan kedua jaringan lokal yang berbeda dari keda switch:
+
+```shell
+auto eth0
+iface eth0 inet dhcp
+
+auto eth1
+iface eth1 inet static
+	address 10.72.1.1
+	netmask 255.255.255.0
+
+auto eth2
+iface eth2 inet static
+	address 10.72.2.1
+	netmask 255.255.255.0
+```
+
+![switches](./images/3-switches.png)
+
 ## 4. Menghubungkan tiap Client dengan internet
 
 **Goal:** Menyambungkan Melkor, Manwe, Varda, dan Ulmo dengan internet.
 
+### 4.1 Router Configuration
+
+Untuk membuat tiap tiap client dapat terhubung ke internet harus dilakukannya konfigurasi pada router, `Eru`, yang terhubung secara langsung dengan `NAT1`. Hal ini dikarenakan semua request dari client akan melalui `Eru` dan juga akan diteruskan ke internet melalui `Eru` menuju `NAT1`. Konfigurasi yang dilakukan pada `Eru` adalah konfigurasi iptables, yaitu routing table yang dimiliki `Eru`, sehingga diperbolehkannya request dan diteruskan request tersebut menuju internet. Konfigurasi yang ditambahkan dapat dilihat di bawah berikut.
+
+```shell
+auto eth0
+iface eth0 inet dhcp
+        up apt update && apt install iptables -y
+        up iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 10.72.0.0/16
+
+auto eth1
+iface eth1 inet static
+	address 10.72.1.1
+	netmask 255.255.255.0
+
+auto eth2
+iface eth2 inet static
+	address 10.72.2.1
+	netmask 255.255.255.0
+```
+
 ## 5. Membuat Konfigurasi Node tidak hilang ketika Restart
 
-**Goal:** Mengkonfigurasi tiap Node (Router dan Client) sehingga ketika di-restart konfigurasi tidak akan terulang.
+**Goal:** Mengonfigurasi tiap Node (Router dan Client) sehingga ketika di-restart konfigurasi tidak akan terulang.
+
+### 5.1 Preliminary
+
+Untuk tiap Node dari network dapat menjaga konfigurasi yang dimiliki tidak ter-restart ulang ketika di-restart dapat dilakukan 3 metode, yaitu:
+
+1. memberikan konfigurasi melalui GNS3 sendiri (Network Configuration)
+2. /root
+3. /root/.bashrc
+
+### 5.2 Network Configuration
+
+Agar konfigurasi tiap node tidak terulang terus-menerus ketika di-restart, kami lebih memilih untuk memanfaatkan Network Configuration pada tiap node. Hal ini dapat dilihat pada berikut:
+
+**1. Eru:**
+
+```shell
+auto eth0
+iface eth0 inet dhcp
+        up apt update && apt install iptables -y
+        up iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 10.72.0.0/16
+
+auto eth1
+iface eth1 inet static
+	address 10.72.1.1
+	netmask 255.255.255.0
+
+auto eth2
+iface eth2 inet static
+	address 10.72.2.1
+	netmask 255.255.255.0
+```
+
+**2. Client:**
+
+```shell
+auto eth0
+iface eth0 inet static
+	address 10.72.x.x
+	netmask 255.255.255.0
+	gateway 10.72.x.x
+        up echo nameserver 192.168.122.1 > /etc/resolv.conf
+        up apt-get update && apt-get install ftp -y
+```
 
 ## 6. Packet Sniffing Koneksi Manwe dengan Eru
 
@@ -80,17 +237,125 @@ graph TD
 > -   **Notes:** Mencantumkan hasil _capture_ yang merupakan hasil _packet sniffing_ dengan _display filter_ untuk menampilkan semua paket yang berasal dari atau menuju ke **IP Address Manwe**.
 > -   **Artifacts:** [traffic.zip](https://drive.google.com/drive/folders/1ULr_Fik1O0_79zUng41POMZtdzJTugVR?usp=sharing)
 
+### 6.1 Original Capture
+
+![icmp](./images/4-icmp.png)
+
+![tcp](./images/5-tcp.png)
+
+### 6.2 Display
+
+Filter using ip.addr == 10.72.1.3
+
+![display-filter](./images/6-display-filter.png)
+
+[Link to capture file](https://drive.google.com/file/d/1LDJq-uvVa-4_Hed7k-uppJYQItqfuVWy/view?usp=sharing)
+
 ## 7. FTP Server & 2 New User Permissions
 
 **Goal:** Membuat suatu FTP Server dengan dua user baru dimana ainur memiliki _write & read permission_ dan melkor tidak memiliki permission sama sekali.
 
 > -   **Notes:** Melakukan testing dengan file teks sederhana yang diuji dengan diakses oleh kedua user baru.
 
+### 7.1 FTP Script
+
+Pertama-tama menggunakan script berikut agar bisa melakukan setup FTP server besertakan kedua user: ainur (read & write) dan melkor (tidak ada permission sama sekali).
+
+```shell
+echo "Updating package list and installing vsftpd..."
+apt-get update -qq > /dev/null 2>&1
+apt-get install -qq -y vsftpd > /dev/null 2>&1
+
+echo "Creating shared FTP directory and a test file..."
+mkdir -p /srv/ftp
+chown ftp:ftp /srv/ftp
+chmod 777 /srv/ftp
+echo "This is a test file on the server." > /srv/ftp/serverfile.txt
+
+AINUR_PASS="ainur"
+MELKOR_PASS="melkor"
+
+echo "Creating user 'ainur' and 'melkor'..."
+useradd -m ainur
+useradd -m melkor
+
+echo "Setting passwords for users..."
+echo "ainur:$AINUR_PASS" | chpasswd
+echo "melkor:$MELKOR_PASS" | chpasswd
+
+echo "Configuring vsftpd..."
+
+cat > /etc/vsftpd.conf <<EOF
+listen=YES
+listen_ipv6=NO
+anonymous_enable=NO
+local_enable=YES
+write_enable=YES
+dirmessage_enable=YES
+use_localtime=YES
+xferlog_enable=YES
+connect_from_port_20=YES
+chroot_local_user=YES
+secure_chroot_dir=/var/run/vsftpd/empty
+pam_service_name=vsftpd
+rsa_cert_file=/etc/ssl/certs/ssl-cert-snakeoil.pem
+rsa_private_key_file=/etc/ssl/private/ssl-cert-snakeoil.key
+ssl_enable=NO
+allow_writeable_chroot=YES
+
+# Custom settings
+local_root=/srv/ftp
+userlist_enable=YES
+userlist_file=/etc/vsftpd.userlist
+userlist_deny=YES
+EOF
+
+
+echo "Blocking user 'melkor'..."
+echo "melkor" > /etc/vsftpd.userlist
+
+echo "Restarting FTP server to apply all changes..."
+service vsftpd restart
+
+echo ""
+echo "FTP Server setup is complete!"
+echo "  - User 'ainur' has read/write access (Password: $AINUR_PASS)"
+echo "  - User 'melkor' is blocked from logging in (Password: $MELKOR_PASS)"
+echo "  - The shared directory is /srv/ftp"
+```
+
+Hal ini ditambahkan pada `/root` sehingga dapat dijalankan dengan mudah karena tidak hilang ketika direstart. Lalu ketika dijalankan akan sudah terbuat FTP server dan kedua user tersebut.
+
+### 7.2 FTP Server Result
+
+![ainur-success](./images/7-ainur-success.png)
+![ainur-put](./images/8-ainur-put.png)
+![ainur-get](./images/9-ainur-get.png)
+![melkor](./images/10-melkor.png)
+
 ## 8. Analisis Proses Upload File & Identifikasi Perintah FTP
 
 **Goal:** Menggunakan user _ainur_ untuk upload dari _Ulmo_ untuk upload file ke _Eru_ dan menganalisis proses dan mengidentifikasi perintah FTP yang terjadi menggunakan Wireshark.
 
 > -   **Artifacts:** [cuaca.zip](https://drive.google.com/drive/folders/1XQh6S1xXcaP1QoUhQSZORsgK9xdMUxXx?usp=sharing)
+
+### 8.1 Package Installation
+
+Pertama-tama melakukan instalasi package yang ingin di-transfer, seperti berikut: 
+
+![package installation](./images/11-cuaca.png)
+
+### 8.2 Wireshark Analysis
+
+Berikut merupakan hasil dari upload.
+
+![up](./images/12-put-cuaca.png)
+
+Dan dapat dilihat dari berikut bahwa protokol yang digunakan untuk menginisiasi upload adalah dengan protokol FTP. Sementara itu, untuk memindahkan data menggunakan FTP-DATA, dan jika cara terlalu besar untuk satu packet, maka proses transfer akan dibagi menjadi lebih dari satu packet.
+
+![up-cuaca](./images/13-cuaca-wireshark.png)
+
+![up-mendung](./images/14-mendung-wireshark.png)
 
 ## 9. Akses Pengguna FTP
 
