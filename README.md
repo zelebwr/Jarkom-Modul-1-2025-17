@@ -341,7 +341,7 @@ Hal ini ditambahkan pada `/root` sehingga dapat dijalankan dengan mudah karena t
 
 ### 8.1 Package Installation
 
-Pertama-tama melakukan instalasi package yang ingin di-transfer, seperti berikut: 
+Pertama-tama melakukan instalasi package yang ingin di-transfer, seperti berikut:
 
 ![package installation](./images/11-cuaca.png)
 
@@ -409,7 +409,8 @@ Konfigurasi **ainur**
 echo “write_enable=NO” > /etc/vsftpd_user_conf/ainur
 ```
 
-Setelah selesai menambahkan konfigurasi, kita bisa melakukan *restart* pada *service* `vsftpd`:
+Setelah selesai menambahkan konfigurasi, kita bisa melakukan _restart_ pada _service_ `vsftpd`:
+
 ```
 service vsftpd restart
 ```
@@ -712,3 +713,209 @@ Setelah itu, kita dapat melakukan _decoding_ untuk mendapatkan pesan asli yang i
 Melalui proses ini, kita telah berhasil mendapatkan pesan tersembunyi.
 
 > -   flag: KOMJAR25{K3yb0ard_W4rr10r_g75X7A6dEVFygJciLNGKK6GKA}
+
+## 16. Melkor's Malware Search
+
+### 16.1 Result Output
+
+```shell
+What credential did the attacker use to log in?
+Format: user:pass
+> ind@psg420.com:{6r_6e#TfT1p
+
+How many files are suspected of containing malware?
+Format: int
+> 5
+
+What is the hash of the first file (q.exe)?
+Format: sha256
+> ca34b0926cdc3242bbfad1c4a0b42cc2750d90db9a272d92cfb6cb7034d2a3bd
+
+What is the hash of the second file (w.exe)?
+Format: sha256
+> 08eb941447078ef2c6ad8d91bb2f52256c09657ecd3d5344023edccf7291e9fc
+
+What is the hash of the third file (e.exe)?
+Format: sha256
+> 32e1b3732cd779af1bf7730d0ec8a7a87a084319f6a0870dc7362a15ddbd3199
+
+What is the hash of the fourth file (r.exe)?
+Format: sha256
+> 4ebd58007ee933a0a8348aee2922904a7110b7fb6a316b1c7fb2c6677e613884
+
+What is the hash of the fifth file (t.exe)?
+Format: sha256
+> 10ce4b79180a2ddd924fdc95951d968191af2ee3b7dfc96dd6a5714dbeae613a
+
+Congratulations! Here is your flag: KOMJAR25{Y0u_4r3_4_g00d_4nalyz3r_T0fNlfE2jaqZ2kdR6fqI929Z0}
+```
+
+### 16.2 Walkthrough
+
+Untuk yang pertama kali kami lakukan adalah mencari tahu credential yang ada (yang ditanyakan pada pertanyaan pertama). Hal ini kami lakukan dengan mencari dari list terlebih dahulu dengan keywords `user`, `pass`, `credential`. Tetapi ternyata dapat ditemukan melalui keyword `user` saja.
+
+![user & pass](./images/15-user-pass.png)
+
+Lalu dengan melakukan Follow TCP Stream, maka dapat ditemukan berbagai informasi lainnya yang menunjukkan malware-malware tersebut.
+
+![5-malware](./images/16-5malware.png)
+
+Tetapi cara mendownload packetnya adalah dengan mencari FTP-DATA stream/protocol yang ada lalu dengan mencari TCP stream yang berhubungan dengan malware yang ingin didownload maka dapat kita download file nya dengan "Follow TCP Stream" dan save file sebagai raw data.
+
+![malware follow tcp stream](./images/17-malware-follow-ftp.png)
+
+Lalu, setelah mendownload tiap malware satu-satu dengan melakukan cara di atas berulang kali, maka sekarang mencari hash `sha256` tiap file (malware) tersebut. Hal ini dapat dilakukan dengan sederhana dengan melakukan command berikut.
+
+```shell
+sha256sum [file]
+```
+
+## 17. Malware Melkor tersebar dengan gagal
+
+### 17.1 Result Output
+
+```shell
+What is the name of the first suspicious file?
+Format: file.exe
+> Invoice&MSO-Request.doc
+
+What is the name of the second suspicious file?
+Format: file.exe
+> knr.exe
+
+What is the hash of the second suspicious file (knr.exe)?
+Format: sha256
+> 749e161661290e8a2d190b1a66469744127bc25bf46e5d0c6f2e835f4b92db18
+
+Congratulations! Here is your flag: KOMJAR25{M4ster_4n4lyzer_IdMRNgdK1f28taHRMCzzrGCKG}
+```
+
+### 17.2 Walkthrough
+
+Dengan menggunakan informasi sebelumnya, asumsi kami yang pertama adalah bahwa dengan mencari file dengan berakhiran `.exe`.
+
+![knr](./images/18-knr.png)
+
+Tetapi terlihat dari pertanyaan pertama mengatakan bahwa terdapatnya "first suspicious file", maka asumsinya adalah bahwa terdapat lebih dari satu file malware. Dengan asumsi lagi, dikarenakan melakukan download `knr.exe` melalui "Export Objects &rarr; HTTP" maka juga ditemukan beberapa file lainnya.
+
+![doc](./images/19-doc.png)
+
+Dengan begitu, telah ditemukan kedua malware (selain `ncsi.txt`). Berikutnya hanya membutuhkan hash `sha256` dari kedua malware, yang dapat dilakukan dengan command di bawah berikut.
+
+```shell
+sha256sum [file]
+```
+
+## 18. Malware Melkor Gagal kedua kalinya
+
+### 18.1 Result Output
+
+```shell
+How many files are suspected of containing malware?
+Format: int
+> 2
+
+What is the name of the first malicious file?
+Format: file.exe
+> d0p2nc6ka3f_fixholycj4ovqfcy_smchzo_ub83urjpphrwahjwhv_o5c0fvf6.exe
+
+What is the name of the first malicious file?
+Format: file.exe
+> d0p2nc6ka3f_fixhohlycj4ovqfcy_smchzo_ub83urjpphrwahjwhv_o5c0fvf6.exe
+
+Apa nama file berbahaya yang kedua?
+Format: file.exe
+> oiku9bu68cxqenfmcsos2aek6t07_guuisgxhllixv8dx2eemqddnhyh46l8n_di.exe
+
+What is the hash of the first malicious file?
+Format: sha256
+> 59896ae5f3edcb999243c7bfdc0b17eb7fe28f3a66259d797386ea470c010040
+
+What is the hash of the second malicious file?
+Format: sha256
+> cf99990bee6c378cbf56239b3cc88276eec348d82740f84e9d5c343751f82560
+
+Congratulations! Here is your flag: KOMJAR25{Y0u_4re_g0dl1ke_2QMhD8iSDkKnABxb0w9IK8BQj}
+```
+
+### 18.2 Walkthrough
+
+Dengan asumsi yang sama dengan soal sebelumnya, kami mencari file `.exe` terlebih dahulu.
+
+![init search](./images/20-init-exe-search.png)
+
+Dengan begitu, kami berusaha melakukan Export Object dan terlihat bahwa protokol yang digunakan pada file `.exe` tersebut adalah SMB, maka kami melakukan "Export Objects &rarr; SMB".
+
+![after search](./images/21-exe-after.png)
+
+Tetapi terlihat bahwa terdapat 2 file `.exe` yang identik satu dengan yang lainnya, maka diasumsikan bahwa keduanya merupakan file malware yang seharusnya kami cari. Setelah kami coba pada soal, maka dapat dikonfirmasi bahwa keduanya merupakan file malware yang sedang dicari. Karena sudah terkonfirmasi bahwa keduanya merupakan file malware maka dapat dicari hash `sha256` dengan sederhana melalui command berikut.
+
+```shell
+sha256sum [file]
+```
+
+## 19. Pesan Teror Melkor
+
+### 19.1 Result Output
+
+```shell
+Who sent the threatening message?
+Format: string (name)
+> Your Life
+
+How much ransom did the attacker demand ($)?
+Format: int
+> 1600
+
+What is the attacker's bitcoin wallet?
+Format: string
+> 1CWHmuF8dHt7HBGx5RKKLgg9QA2GmE3UyL
+Congratulations! Here is your flag: KOMJAR25{Y0u_4re_J4rk0m_G0d_PvmSIy7PHDYdFZmsoZxuDcgIl}
+```
+
+### 19.2 Walkthrough
+
+Karena kali ini pertanyaan tidak menanyakan mengenai malware, yang kami lakukan pertama kali adalah mencari pesan yang dikirimkan ini. Ketika terlihat suatu kejanggalan, kami melihat TCP Stream-nya dan telah menemukan jawaban pada pertanyaan pertama (`Your Life`)
+
+![your-life](./images/22-your-life.png)
+
+Lalu untuk jawaban pertanyaan-pertanyaan selanjutnya juga ada pada TCP Stream yang sama (pada pesan yang sama), seperti berikut:
+
+![the-rest](./images/23-the-rest.png)
+
+## 20. Help by Manwe
+
+### 20.1 Result Output
+
+```shell
+What encryption method is used?
+Format: string
+> TLS
+
+What is the name of the malicious file placed by the attacker?
+Format: file.exe
+> invest_20.dll
+
+What is the hash of the file containing the malware?
+Format: sha256
+> 31cf42b2a7c5c558f44cfc67684cc344c17d4946d3a1e0b2cecb8eb58173cb2f
+
+Congratulations! Here is your flag: KOMJAR25{B3ware_0f_M4lw4re_qYkq8kdrglJ9us4QaVQrFUlys}
+```
+
+### 20.2 Walkthrough
+
+Karena pengetahuan sebelumnya yang kami miliki, asumsi kami adalah bahwa ini merupakan encryption method TLS. Dengan asumsi tersebut, langkah selanjutnya yang kami lakukan adalah untuk menggunakan `keylogsfile` pada wireshark. Hal ini dapat dilakukan melalui setting yang dimiliki Wireshark sendiri.
+
+![tls](./images/24-tls.png)
+![normal](./images/25-normal.png)
+
+Setelah tampilan sudah kembali menjadi normal, maka yang kami lakukan adalah dengan mencari tahu apakah ada objects yang dapat di download terlebih dahulu. Kami mencari metode yang paling sering muncul yaitu adalah dengan menggunakan "Export Objects &rarr; HTTP".
+
+![dll](./images/26-export-dll.png)
+
+Dan dengan begitu, kami menemukan file yang diberikan oleh Manwe, yaitu yang berakhiran dengan `.dll`. Dan berikutnya dilakukan mencari `sha256` hash nya saja dengan menggunakan command berikut.
+
+```shell
+sha256sum [file]
+```
