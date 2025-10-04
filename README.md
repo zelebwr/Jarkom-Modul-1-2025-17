@@ -409,6 +409,11 @@ Konfigurasi **ainur**
 echo “write_enable=NO” > /etc/vsftpd_user_conf/ainur
 ```
 
+Setelah selesai menambahkan konfigurasi, kita bisa melakukan *restart* pada *service* `vsftpd`:
+```
+service vsftpd restart
+```
+
 ### 9.4 Uji Akses Pengguna
 
 Pada node **Manwe**, kita seharusnya dapat megunduh, mengunggah, dan menghapus file melalui FTP dengan kredensial
